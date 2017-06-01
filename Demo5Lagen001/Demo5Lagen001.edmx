@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Demo5Lagen001.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Demo5Lagen001StoreContainer">
+    <EntitySet Name="DocentSet" EntityType="Demo5Lagen001.Store.DocentSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StudentSet" EntityType="Demo5Lagen001.Store.StudentSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DocentStudent" EntityType="Demo5Lagen001.Store.DocentStudent" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_DocentStudent_Docent" Association="Demo5Lagen001.Store.FK_DocentStudent_Docent">
+      <End Role="Docent" EntitySet="DocentSet" />
+      <End Role="DocentStudent" EntitySet="DocentStudent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DocentStudent_Student" Association="Demo5Lagen001.Store.FK_DocentStudent_Student">
+      <End Role="Student" EntitySet="StudentSet" />
+      <End Role="DocentStudent" EntitySet="DocentStudent" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="DocentSet">
+    <Key>
+      <PropertyRef Name="DocentCode" />
+    </Key>
+    <Property Name="DocentCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Naam" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Opleiding" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudentSet">
+    <Key>
+      <PropertyRef Name="Studentnummer" />
+    </Key>
+    <Property Name="Studentnummer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Naam" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Opleiding" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Klas" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DocentStudent">
+    <Key>
+      <PropertyRef Name="Docent_DocentCode" />
+      <PropertyRef Name="Student_Studentnummer" />
+    </Key>
+    <Property Name="Docent_DocentCode" Type="int" Nullable="false" />
+    <Property Name="Student_Studentnummer" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_DocentStudent_Docent">
+    <End Role="Docent" Type="Demo5Lagen001.Store.DocentSet" Multiplicity="1" />
+    <End Role="DocentStudent" Type="Demo5Lagen001.Store.DocentStudent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docent">
+        <PropertyRef Name="DocentCode" />
+      </Principal>
+      <Dependent Role="DocentStudent">
+        <PropertyRef Name="Docent_DocentCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DocentStudent_Student">
+    <End Role="DocentStudent" Type="Demo5Lagen001.Store.DocentStudent" Multiplicity="*" />
+    <End Role="Student" Type="Demo5Lagen001.Store.StudentSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="Studentnummer" />
+      </Principal>
+      <Dependent Role="DocentStudent">
+        <PropertyRef Name="Student_Studentnummer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Demo5Lagen001.BU" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Demo5Lagen001Container" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DocentSet" EntityType="Demo5Lagen001.BU.Docent" />
+          <EntitySet Name="StudentSet" EntityType="Demo5Lagen001.BU.Student" />
+          <AssociationSet Name="DocentStudent" Association="Demo5Lagen001.BU.DocentStudent">
+            <End Role="Docent" EntitySet="DocentSet" />
+            <End Role="Student" EntitySet="StudentSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Docent">
+          <Key>
+            <PropertyRef Name="DocentCode" />
+          </Key>
+          <Property Name="DocentCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naam" Type="String" Nullable="false" />
+          <Property Name="Opleiding" Type="String" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Demo5Lagen001.BU.DocentStudent" FromRole="Docent" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="Studentnummer" />
+          </Key>
+          <Property Name="Studentnummer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naam" Type="String" Nullable="false" />
+          <Property Name="Opleiding" Type="String" Nullable="false" />
+          <Property Name="Klas" Type="String" Nullable="false" />
+          <NavigationProperty Name="Docent" Relationship="Demo5Lagen001.BU.DocentStudent" FromRole="Student" ToRole="Docent" />
+        </EntityType>
+        <Association Name="DocentStudent">
+          <End Type="Demo5Lagen001.BU.Docent" Role="Docent" Multiplicity="*" />
+          <End Type="Demo5Lagen001.BU.Student" Role="Student" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Demo5Lagen001StoreContainer" CdmEntityContainer="Demo5Lagen001Container">
+    <EntitySetMapping Name="DocentSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Demo5Lagen001.BU.Docent)">
+        <MappingFragment StoreEntitySet="DocentSet">
+          <ScalarProperty Name="DocentCode" ColumnName="DocentCode" />
+          <ScalarProperty Name="Naam" ColumnName="Naam" />
+          <ScalarProperty Name="Opleiding" ColumnName="Opleiding" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudentSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Demo5Lagen001.BU.Student)">
+        <MappingFragment StoreEntitySet="StudentSet">
+          <ScalarProperty Name="Studentnummer" ColumnName="Studentnummer" />
+          <ScalarProperty Name="Naam" ColumnName="Naam" />
+          <ScalarProperty Name="Opleiding" ColumnName="Opleiding" />
+          <ScalarProperty Name="Klas" ColumnName="Klas" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DocentStudent" TypeName="Demo5Lagen001.BU.DocentStudent" StoreEntitySet="DocentStudent">
+      <EndProperty Name="Docent">
+        <ScalarProperty Name="DocentCode" ColumnName="Docent_DocentCode" />
+      </EndProperty>
+      <EndProperty Name="Student">
+        <ScalarProperty Name="Studentnummer" ColumnName="Student_Studentnummer" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
